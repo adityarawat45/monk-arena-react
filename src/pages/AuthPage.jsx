@@ -44,16 +44,18 @@ export default function AuthPage() {
                 initial="hidden"
                 animate="show"
                 className="relative z-10 flex flex-col h-full items-center justify-center p-6 gap-28"
-                style={{ maxWidth: 420, margin: '0 auto', width: '100%', minHeight: '80vh' }}
+                style={{ maxWidth: 'min(920px, 92vw)', margin: '0 auto', width: '100%', minHeight: '80vh' }}
             >
                 {/* Top: logo + headline */}
-                <div className="flex flex-col items-center gap-6 w-full">
+                <div className="flex flex-col items-center gap-1 w-full">
                     <motion.div variants={fadeUp}>
                         <img
                             src="/transparentlogo.png"
                             alt="Monk Arena"
                             style={{
-                                height: 140, width: 'auto', objectFit: 'contain',
+                                height: 'clamp(200px, 40vw, 360px)',
+                                width: 'auto',
+                                objectFit: 'contain',
                                 filter: 'drop-shadow(0 0 40px rgba(255,255,255,0.12))',
                             }}
                         />
@@ -64,10 +66,11 @@ export default function AuthPage() {
                             style={{
                                 fontFamily: "'Montserrat', sans-serif",
                                 fontWeight: 900,
-                                fontSize: 'clamp(28px, 7vw, 34px)',
+                                fontSize: 'clamp(34px, 6.5vw, 64px)',
                                 letterSpacing: '1.5px',
                                 color: '#fff',
-                                lineHeight: 1.1,
+                                lineHeight: 1.02,
+                                whiteSpace: 'nowrap',
                             }}
                         >
                             MONK ARENA
@@ -75,36 +78,19 @@ export default function AuthPage() {
                         <p
                             style={{
                                 fontFamily: "'Montserrat', sans-serif",
-                                color: 'rgba(255,255,255,0.5)',
-                                fontSize: 13,
-                                marginTop: 10,
-                                letterSpacing: '0.3px',
+                                color: 'rgba(255,255,255,0.85)',
+                                fontSize: 'clamp(14px, 2.8vw, 22px)',
+                                marginTop: 6,
+                                letterSpacing: '0.4px',
+                                fontWeight: 600,
+                                lineHeight: 1.05,
                             }}
                         >
-                            Discipline. Consistency. Competition.
+                            Discipline.   Consistency.   Competition.
                         </p>
                     </motion.div>
 
-                    {/* Stat pills */}
-                    <motion.div variants={fadeUp} className="flex gap-3 flex-wrap justify-center mt-4">
-                        {['Track Streaks', 'Compete Globally', 'Private Rooms'].map((t) => (
-                            <span
-                                key={t}
-                                style={{
-                                    background: 'rgba(255,255,255,0.05)',
-                                    border: '1px solid rgba(255,255,255,0.1)',
-                                    borderRadius: 999,
-                                    padding: '5px 14px',
-                                    fontSize: 11,
-                                    fontWeight: 600,
-                                    color: 'rgba(255,255,255,0.55)',
-                                    letterSpacing: '0.3px',
-                                }}
-                            >
-                                {t}
-                            </span>
-                        ))}
-                    </motion.div>
+                    {/* Stat pills removed per design feedback */}
                 </div>
 
                 {/* Bottom: CTA */}
@@ -146,7 +132,7 @@ export default function AuthPage() {
                         )}
                     </motion.button>
 
-                    <p style={{ textAlign: 'center', fontSize: 11, color: 'rgba(255,255,255,0.22)', marginTop: 4 }}>
+                    <p style={{ textAlign: 'center', fontSize: 11, color: 'gray', marginTop: 4 }}>
                         By continuing, you agree to our Privacy Policy &amp; Terms.
                     </p>
                 </motion.div>
