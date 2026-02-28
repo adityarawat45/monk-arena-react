@@ -13,7 +13,7 @@ export function getRankClass(index) {
     return 'rank-other';
 }
 
-const MEDAL = ['🥇', '🥈', '🥉'];
+const MEDAL = ['1', '2', '3'];
 
 export default function LeaderTile({ user, index, onTap, tappable = false, animDelay = 0 }) {
     const rankColor = getRankColor(index);
@@ -72,7 +72,7 @@ export default function LeaderTile({ user, index, onTap, tappable = false, animD
 
             {/* Streak */}
             <span className="streak-badge">
-                🔥 {user.current_streak ?? 0}d
+                {user.current_streak ?? 0}d
             </span>
 
             {/* Tap indicator for owner */}

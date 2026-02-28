@@ -100,7 +100,7 @@ export default function RoomDetailPage() {
                         {/* Section label */}
                         <div className="content-wrap" style={{ paddingTop: 20, paddingBottom: 8 }}>
                             <p className="section-label" style={{ textAlign: 'center' }}>
-                                🏆 Leaderboard · {leaderboard.length} member{leaderboard.length !== 1 ? 's' : ''}
+                                Leaderboard · {leaderboard.length} member{leaderboard.length !== 1 ? 's' : ''}
                             </p>
                         </div>
 
@@ -109,7 +109,6 @@ export default function RoomDetailPage() {
                             <div className="content-wrap" style={{ paddingTop: 4 }}>
                                 {leaderboard.length === 0 ? (
                                     <div className="empty-state" style={{ minHeight: '40vh' }}>
-                                        <span style={{ fontSize: 40 }}>🏅</span>
                                         <p>No members yet.</p>
                                     </div>
                                 ) : (
@@ -140,7 +139,7 @@ export default function RoomDetailPage() {
                                     whileHover={{ scale: 1.01 }}
                                     whileTap={{ scale: 0.98 }}
                                 >
-                                    📨 Invite Member
+                                    Invite Member
                                 </motion.button>
                             )}
 
@@ -157,9 +156,9 @@ export default function RoomDetailPage() {
                                     {processing ? (
                                         <div className="spinner spinner-sm" style={{ borderTopColor: '#ef4444' }} />
                                     ) : confirmLeave ? (
-                                        `⚠️ Confirm ${isOwner ? 'Delete' : 'Leave'}`
+                                        `Confirm ${isOwner ? 'Delete' : 'Leave'}`
                                     ) : (
-                                        isOwner ? '🗑 Delete Room' : '🚪 Leave Room'
+                                        isOwner ? 'Delete Room' : 'Leave Room'
                                     )}
                                 </motion.button>
                             </AnimatePresence>

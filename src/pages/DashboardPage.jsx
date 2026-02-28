@@ -54,7 +54,7 @@ export default function DashboardPage() {
             effective = 0; status = 'Come back stronger tomorrow.';
             cEnabled = false; rEnabled = false;
         } else if (todayLog?.status === 'confirmed') {
-            effective = currentStreak; status = 'Streak confirmed today. 🔥';
+            effective = currentStreak; status = 'Streak confirmed today.';
             cEnabled = false; rEnabled = true;
         } else {
             if (!lastDate) {
@@ -252,7 +252,7 @@ export default function DashboardPage() {
                             borderRadius: 999, padding: '6px 16px',
                             fontSize: 12, color: 'rgba(255,255,255,0.35)', fontWeight: 500,
                         }}>
-                            🏆 Best: {longestStreak} days
+                            Best: {longestStreak} days
                         </span>
                     </motion.div>
 

@@ -49,7 +49,6 @@ export default function LeaderboardPage() {
                     <Loader />
                 ) : leaders.length === 0 ? (
                     <div className="empty-state page-enter">
-                        <span style={{ fontSize: 48 }}>🏅</span>
                         <p>No users yet</p>
                     </div>
                 ) : (
@@ -80,12 +79,12 @@ export default function LeaderboardPage() {
                                                 borderRadius: '16px 16px 0 0',
                                                 padding: '20px 8px 14px',
                                             }}>
-                                                <span style={{ fontSize: 28 }}>🥈</span>
+
                                                 <p style={{ color: '#C0C0C0', fontWeight: 700, fontSize: 13, marginTop: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                     {top3[1].username}
                                                 </p>
                                                 <span className="streak-badge" style={{ fontSize: 11, padding: '3px 8px', marginTop: 4, display: 'inline-flex' }}>
-                                                    🔥 {top3[1].current_streak}d
+                                                    {top3[1].current_streak}d
                                                 </span>
                                             </div>
                                         </motion.div>
@@ -106,12 +105,12 @@ export default function LeaderboardPage() {
                                                 padding: '28px 8px 14px',
                                                 boxShadow: '0 -4px 30px rgba(255,215,0,0.12)',
                                             }}>
-                                                <span style={{ fontSize: 36 }}>🥇</span>
+
                                                 <p style={{ color: '#FFD700', fontWeight: 800, fontSize: 14, marginTop: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                     {top3[0].username}
                                                 </p>
                                                 <span className="streak-badge" style={{ fontSize: 11, padding: '3px 8px', marginTop: 4, display: 'inline-flex' }}>
-                                                    🔥 {top3[0].current_streak}d
+                                                    {top3[0].current_streak}d
                                                 </span>
                                             </div>
                                         </motion.div>
@@ -131,12 +130,12 @@ export default function LeaderboardPage() {
                                                 borderRadius: '16px 16px 0 0',
                                                 padding: '14px 8px 14px',
                                             }}>
-                                                <span style={{ fontSize: 24 }}>🥉</span>
+
                                                 <p style={{ color: '#CD7F32', fontWeight: 700, fontSize: 13, marginTop: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                     {top3[2].username}
                                                 </p>
                                                 <span className="streak-badge" style={{ fontSize: 11, padding: '3px 8px', marginTop: 4, display: 'inline-flex' }}>
-                                                    🔥 {top3[2].current_streak}d
+                                                    {top3[2].current_streak}d
                                                 </span>
                                             </div>
                                         </motion.div>
