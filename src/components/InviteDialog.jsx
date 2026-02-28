@@ -40,7 +40,9 @@ export default function InviteDialog({ roomId, onClose }) {
                 transition={{ type: 'spring', stiffness: 220, damping: 24 }}
             >
                 <div style={{ textAlign: 'center', marginBottom: 20 }}>
-                    <span style={{ fontSize: 36 }}>📨</span>
+                    <svg viewBox="0 0 24 24" fill="rgba(255,255,255,0.9)" style={{ width: 36, height: 36 }}>
+                        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                    </svg>
                     <h3 style={{
                         fontFamily: "'Montserrat', sans-serif",
                         fontWeight: 700, fontSize: 18, color: '#fff', marginTop: 8,

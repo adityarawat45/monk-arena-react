@@ -59,7 +59,6 @@ export default function RoomsPage() {
                     <Loader />
                 ) : rooms.length === 0 ? (
                     <div className="empty-state page-enter">
-                        <span style={{ fontSize: 48 }}>🚪</span>
                         <p style={{ fontSize: 14, fontWeight: 500 }}>No rooms yet</p>
                         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)' }}>
                             Create one with the + button

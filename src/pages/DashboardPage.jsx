@@ -244,17 +244,7 @@ export default function DashboardPage() {
                         {statusMessage}
                     </motion.p>
 
-                    {/* Longest streak pill */}
-                    <motion.div variants={fadeUp(0.18)} initial="hidden" animate="show">
-                        <span style={{
-                            background: 'rgba(255,255,255,0.04)',
-                            border: '1px solid rgba(255,255,255,0.08)',
-                            borderRadius: 999, padding: '6px 16px',
-                            fontSize: 12, color: 'rgba(255,255,255,0.35)', fontWeight: 500,
-                        }}>
-                            Best: {longestStreak} days
-                        </span>
-                    </motion.div>
+                    {/* Longest streak (moved to footer) */}
 
                     {/* ── Action Buttons ── */}
                     <motion.div
@@ -317,6 +307,10 @@ export default function DashboardPage() {
                     </motion.div>
                 </div>
             </main>
+
+            <footer className="page-bottom-note" aria-hidden="true">
+                Longest Streak  {longestStreak} days
+            </footer>
         </div>
     );
 }

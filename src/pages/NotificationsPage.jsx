@@ -76,7 +76,6 @@ export default function NotificationsPage() {
                     <Loader />
                 ) : invites.length === 0 ? (
                     <div className="empty-state page-enter">
-                        <span style={{ fontSize: 48 }}>📭</span>
                         <p style={{ fontSize: 14, fontWeight: 500 }}>No pending invites</p>
                         <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.25)' }}>
                             You're all caught up
@@ -114,9 +113,10 @@ export default function NotificationsPage() {
                                                 background: 'rgba(255,255,255,0.07)',
                                                 border: '1px solid rgba(255,255,255,0.1)',
                                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                fontSize: 20,
                                             }}>
-                                                🚪
+                                                <svg viewBox="0 0 24 24" fill="rgba(255,255,255,0.9)" style={{ width: 20, height: 20 }}>
+                                                    <path d="M7 2h10a1 1 0 011 1v18a1 1 0 01-1 1H7a1 1 0 01-1-1V3a1 1 0 011-1zm5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                                                </svg>
                                             </div>
                                             <div style={{ flex: 1, overflow: 'hidden' }}>
                                                 <p style={{

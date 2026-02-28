@@ -584,6 +584,22 @@ body {
   padding: 0 24px;
 }
 
+/* Muted footer note shown at the very bottom */
+.page-bottom-note {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 18px; /* lifted from the very edge */
+  text-align: center;
+  font-size: 13px; /* slightly larger */
+  color: rgba(255, 255, 255, 0.18); /* slightly brighter */
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
 /* ─── Empty state ────────────────────────────────────────────────────────────── */
 .empty-state {
   display: flex;
