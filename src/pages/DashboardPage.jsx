@@ -107,7 +107,7 @@ export default function DashboardPage() {
         <div className="page-bg min-h-dvh flex flex-col">
             {/* ── App Bar ── */}
             <header className="app-bar">
-                <div style={{ width: 40 }} />
+                <div className="app-left-spacer" style={{ width: 40 }} />
                 <motion.h1
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -160,7 +160,7 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Compact 'more' menu for small screens */}
-                <div tabIndex={0} style={{ marginLeft: 8, position: 'relative' }} onBlur={() => setShowAppMenu(false)}>
+                <div tabIndex={0} className="app-more-wrap" style={{ position: 'relative' }} onBlur={() => setShowAppMenu(false)}>
                     <button
                         id="appbar-more-btn"
                         className="icon-btn app-more-btn"
@@ -173,8 +173,8 @@ export default function DashboardPage() {
                     </button>
                     {showAppMenu && (
                         <div className="appbar-dropdown" role="menu">
-                            <button onClick={() => { setShowAppMenu(false); navigate('/notifications'); }} aria-label="Notifications">Notifications</button>
-                            <button onClick={() => { setShowAppMenu(false); signOut(); }} aria-label="Sign out">Sign out</button>
+                            <button onMouseDown={(e) => { e.preventDefault(); setShowAppMenu(false); navigate('/notifications'); }} aria-label="Notifications">Notifications</button>
+                            <button onMouseDown={(e) => { e.preventDefault(); setShowAppMenu(false); signOut(); }} aria-label="Sign out">Sign out</button>
                         </div>
                     )}
                 </div>

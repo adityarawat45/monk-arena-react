@@ -433,8 +433,8 @@ body {
 
 .appbar-dropdown {
   position: absolute;
-  right: 12px;
-  top: 64px;
+  right: 0; /* anchor to the right edge of the button container */
+  top: calc(100% + 6px); /* place just below the button */
   background: #111;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
@@ -469,6 +469,20 @@ body {
   }
   .app-more-btn {
     display: flex;
+    margin-left: auto; /* align to right edge on small screens */
+  }
+  /* push the more-button container to the right so dropdown anchors correctly */
+  .app-more-wrap {
+    margin-left: auto;
+    position: relative;
+  }
+  /* hide left spacer and reduce app-bar side padding on small screens */
+  .app-left-spacer {
+    display: none;
+  }
+  .app-bar {
+    padding-left: 12px;
+    padding-right: 12px;
   }
 }
 

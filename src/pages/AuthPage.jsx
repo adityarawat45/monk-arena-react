@@ -27,7 +27,7 @@ export default function AuthPage() {
     };
 
     return (
-        <div className="page-bg flex flex-col min-h-dvh overflow-hidden">
+        <div className="page-bg flex flex-col min-h-dvh overflow-hidden m-0 p-0 justify-center">
             {/* Decorative glow orb */}
             <div
                 style={{
@@ -43,11 +43,11 @@ export default function AuthPage() {
                 variants={stagger}
                 initial="hidden"
                 animate="show"
-                className="relative z-10 flex flex-col min-h-dvh items-center justify-between px-6 py-14"
-                style={{ maxWidth: 420, margin: '0 auto', width: '100%' }}
+                className="relative z-10 flex flex-col h-full items-center justify-center p-6 gap-28"
+                style={{ maxWidth: 420, margin: '0 auto', width: '100%', minHeight: '80vh' }}
             >
                 {/* Top: logo + headline */}
-                <div className="flex flex-col items-center gap-6 flex-1 justify-center">
+                <div className="flex flex-col items-center gap-6 w-full">
                     <motion.div variants={fadeUp}>
                         <img
                             src="/transparentlogo.png"
@@ -86,7 +86,7 @@ export default function AuthPage() {
                     </motion.div>
 
                     {/* Stat pills */}
-                    <motion.div variants={fadeUp} className="flex gap-3 flex-wrap justify-center">
+                    <motion.div variants={fadeUp} className="flex gap-3 flex-wrap justify-center mt-4">
                         {['Track Streaks', 'Compete Globally', 'Private Rooms'].map((t) => (
                             <span
                                 key={t}
