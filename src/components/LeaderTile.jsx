@@ -75,12 +75,7 @@ export default function LeaderTile({ user, index, onTap, tappable = false, animD
                 {user.current_streak ?? 0}d
             </span>
 
-            {/* Tap indicator for owner */}
-            {tappable && (
-                <svg viewBox="0 0 24 24" fill="rgba(255,255,255,0.2)" style={{ width: 14, height: 14, flexShrink: 0 }}>
-                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-                </svg>
-            )}
+            {/* removed separate tap indicator — entire tile is clickable when `tappable` */}
         </motion.div>
     );
 }

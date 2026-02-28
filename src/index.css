@@ -377,6 +377,16 @@ body {
   width: 100%;
 }
 
+/* Constrain bottom-sheet/snackbar on wide screens */
+@media (min-width: 900px) {
+  .sheet-panel {
+    width: calc(100% - 48px);
+    max-width: 480px;
+    margin: 0 auto;
+    border-radius: 12px;
+  }
+}
+
 /* ─── App Bar ───────────────────────────────────────────────────────────────── */
 .app-bar {
   position: sticky;
