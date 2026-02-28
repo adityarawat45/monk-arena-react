@@ -198,7 +198,7 @@ export default function DashboardPage() {
                     <motion.img
                         variants={fadeUp(0.05)} initial="hidden" animate="show"
                         src="/transparentlogo.png" alt="Monk Arena"
-                        style={{ height: 52, objectFit: 'contain', filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.1))' }}
+                        style={{ height: 'clamp(96px, 16vw, 140px)', objectFit: 'contain', filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.1))' }}
                     />
 
                     {/* Streak Circle */}
@@ -301,7 +301,7 @@ export default function DashboardPage() {
                                 aria-label={label}
                             >
 
-                                <span style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.65)' }}>{label}</span>
+                                <span style={{ fontSize: 15, fontWeight: 700, color: 'rgba(255,255,255,0.85)' }}>{label}</span>
                             </motion.button>
                         ))}
                     </motion.div>
