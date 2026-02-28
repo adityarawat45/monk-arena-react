@@ -21,6 +21,8 @@ export default function DashboardPage() {
     const navigate = useNavigate();
     const { user, profile, unreadCount, refreshProfile } = useUserStore();
 
+    const [showAppMenu, setShowAppMenu] = useState(false);
+
     const [pageLoading, setPageLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
 
@@ -110,16 +112,18 @@ export default function DashboardPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     style={{
-                        flex: 1, textAlign: 'center',
+                        position: 'absolute', left: '50%', transform: 'translateX(-50%)',
+                        textAlign: 'center',
                         fontFamily: "'Montserrat', sans-serif",
                         fontWeight: 800, fontSize: 20,
-                        letterSpacing: '0.8px', color: '#fff',
+                        letterSpacing: '0.8px', color: '#fff', zIndex: 2,
+                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                     }}
                 >
                     Monk Arena
                 </motion.h1>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <div className="app-actions" style={{ marginLeft: 'auto', alignItems: 'center', gap: 8 }}>
                     <button
                         id="notifications-btn"
                         className="icon-btn"
@@ -153,6 +157,26 @@ export default function DashboardPage() {
                             <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4C2.9 3 2 3.9 2 5v14c0 1.1.9 2 2 2h8v-2H4V5z" />
                         </svg>
                     </button>
+                </div>
+
+                {/* Compact 'more' menu for small screens */}
+                <div tabIndex={0} style={{ marginLeft: 8, position: 'relative' }} onBlur={() => setShowAppMenu(false)}>
+                    <button
+                        id="appbar-more-btn"
+                        className="icon-btn app-more-btn"
+                        onClick={() => setShowAppMenu((s) => !s)}
+                        aria-label="More"
+                    >
+                        <svg viewBox="0 0 24 24" fill="rgba(255,255,255,0.9)" style={{ width: 20, height: 20 }}>
+                            <path d="M12 8a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4zm0 6a2 2 0 110-4 2 2 0 010 4z" />
+                        </svg>
+                    </button>
+                    {showAppMenu && (
+                        <div className="appbar-dropdown" role="menu">
+                            <button onClick={() => { setShowAppMenu(false); navigate('/notifications'); }} aria-label="Notifications">Notifications</button>
+                            <button onClick={() => { setShowAppMenu(false); signOut(); }} aria-label="Sign out">Sign out</button>
+                        </div>
+                    )}
                 </div>
             </header>
 
@@ -273,8 +297,8 @@ export default function DashboardPage() {
                         style={{ width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}
                     >
                         {[
-                            { id: 'leaderboard-btn', label: 'Leaderboard', icon: '🏅', path: '/leaderboard' },
-                            { id: 'rooms-btn', label: 'Private Rooms', icon: '🚪', path: '/rooms' },
+                            { id: 'leaderboard-btn', label: 'Leaderboard', icon: '', path: '/leaderboard' },
+                            { id: 'rooms-btn', label: 'Private Rooms', icon: '', path: '/rooms' },
                         ].map(({ id, label, icon, path }) => (
                             <motion.button
                                 key={id}
@@ -286,7 +310,7 @@ export default function DashboardPage() {
                                 whileTap={{ scale: 0.97 }}
                                 aria-label={label}
                             >
-                                <span style={{ fontSize: 22 }}>{icon}</span>
+
                                 <span style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.65)' }}>{label}</span>
                             </motion.button>
                         ))}

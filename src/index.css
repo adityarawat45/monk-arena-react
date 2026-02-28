@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap");
 @import "tailwindcss";
 
 /* ─── Design Tokens ────────────────────────────────────────────────────────── */
@@ -9,16 +9,16 @@
   --border: rgba(255, 255, 255, 0.08);
   --border-bright: rgba(255, 255, 255, 0.15);
 
-  --gold: #FFD700;
-  --silver: #C0C0C0;
-  --bronze: #CD7F32;
+  --gold: #ffd700;
+  --silver: #c0c0c0;
+  --bronze: #cd7f32;
 
   --green: #4ade80;
-  --amber: #FBBF24;
+  --amber: #fbbf24;
   --red: #ef4444;
 
-  --font-display: 'Montserrat', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-display: "Montserrat", sans-serif;
+  --font-body: "Inter", sans-serif;
 
   --radius-sm: 10px;
   --radius-md: 14px;
@@ -87,17 +87,25 @@ body {
 
 /* Subtle noise texture overlay */
 .page-bg::before {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 255, 255, 0.04) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(74, 222, 128, 0.025) 0%, transparent 60%);
+    radial-gradient(
+      ellipse 80% 50% at 50% -20%,
+      rgba(255, 255, 255, 0.04) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 80% 100%,
+      rgba(74, 222, 128, 0.025) 0%,
+      transparent 60%
+    );
   pointer-events: none;
   z-index: 0;
 }
 
-.page-bg>* {
+.page-bg > * {
   position: relative;
   z-index: 1;
 }
@@ -109,7 +117,10 @@ body {
   border-radius: var(--radius-md);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .glass-card:hover {
@@ -200,7 +211,11 @@ body {
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
-  transition: opacity 0.18s, transform 0.15s, box-shadow 0.2s, background 0.2s;
+  transition:
+    opacity 0.18s,
+    transform 0.15s,
+    box-shadow 0.2s,
+    background 0.2s;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -300,7 +315,10 @@ body {
   font-size: 15px;
   font-family: var(--font-body);
   outline: none;
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
 }
 
 .input-field::placeholder {
@@ -392,6 +410,75 @@ body {
   background: rgba(255, 255, 255, 0.07);
 }
 
+/* ─── App Bar Responsive Actions ─────────────────────────────────────────── */
+.app-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-more-btn {
+  display: none; /* visible on small screens */
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.appbar-dropdown {
+  position: absolute;
+  right: 12px;
+  top: 64px;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 160px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 60;
+}
+
+.appbar-dropdown button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.appbar-dropdown button:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Hide the full action group on small screens and show the compact more button */
+@media (max-width: 639px) {
+  .app-actions {
+    display: none;
+  }
+  .app-more-btn {
+    display: flex;
+  }
+}
+
+/* On larger screens ensure the more button is hidden */
+@media (min-width: 640px) {
+  .app-more-btn {
+    display: none;
+  }
+}
+
 /* ─── Notification Badge ─────────────────────────────────────────────────────── */
 .notif-dot {
   position: absolute;
@@ -435,14 +522,20 @@ body {
 /* ─── Streak Circle ─────────────────────────────────────────────────────────── */
 .streak-circle {
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
   border: 1.5px solid rgba(255, 255, 255, 0.12);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 0 60px rgba(255, 255, 255, 0.04), inset 0 0 40px rgba(255, 255, 255, 0.02);
+  box-shadow:
+    0 0 60px rgba(255, 255, 255, 0.04),
+    inset 0 0 40px rgba(255, 255, 255, 0.02);
 }
 
 /* ─── Page transitions ──────────────────────────────────────────────────────── */

@@ -39,7 +39,7 @@ export default function LeaderboardPage() {
                     fontFamily: "'Montserrat', sans-serif",
                     fontWeight: 800, fontSize: 18, color: '#fff', letterSpacing: '0.5px',
                 }}>
-                    🏆 Leaderboard
+                    Leaderboard
                 </h1>
                 <div style={{ width: 40 }} />
             </header>
