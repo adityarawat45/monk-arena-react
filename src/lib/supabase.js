@@ -73,6 +73,28 @@ export const updateProfile = async ({ userId, username, age }) => {
 
 // ─── Streak RPCs ─────────────────────────────────────────────────────────────────
 
+export function isSameDay(a, b) {
+    if (!a || !b) return false;
+    return a.getFullYear() === b.getFullYear()
+        && a.getMonth() === b.getMonth()
+        && a.getDate() === b.getDate();
+}
+
+export function calculateEffectiveStreak(currentStreak, lastDateRaw) {
+    if (!currentStreak) return 0;
+    if (!lastDateRaw) return 0;
+
+    const lastDate = new Date(lastDateRaw);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (isSameDay(lastDate, today) || isSameDay(lastDate, yesterday)) {
+        return currentStreak;
+    }
+    return 0;
+}
+
 export const confirmStreak = async () => {
     const { error } = await supabase.rpc('confirm_streak');
     if (error) throw error;
@@ -99,11 +121,17 @@ export const getTodayLog = async (userId) => {
 export const getGlobalLeaderboard = async () => {
     const { data, error } = await supabase
         .from('profiles')
-        .select('username, current_streak')
-        .order('current_streak', { ascending: false })
-        .limit(50);
+        .select('username, current_streak, last_confirmation_date')
+        .limit(1000);
     if (error) throw error;
-    return data || [];
+
+    const mapped = (data || []).map((item) => ({
+        username: item.username,
+        current_streak: calculateEffectiveStreak(item.current_streak, item.last_confirmation_date),
+    }));
+
+    mapped.sort((a, b) => b.current_streak - a.current_streak);
+    return mapped.slice(0, 50);
 };
 
 // ─── Notifications ───────────────────────────────────────────────────────────────
@@ -181,14 +209,17 @@ export const removeMember = async (roomId, userId) => {
 export const getRoomLeaderboard = async (roomId) => {
     const { data, error } = await supabase
         .from('room_members')
-        .select('user_id, profiles(username, current_streak)')
+        .select('user_id, profiles(username, current_streak, last_confirmation_date)')
         .eq('room_id', roomId);
     if (error) throw error;
 
     const mapped = (data || []).map((item) => ({
         user_id: item.user_id,
         username: item.profiles?.username ?? '',
-        current_streak: item.profiles?.current_streak ?? 0,
+        current_streak: calculateEffectiveStreak(
+            item.profiles?.current_streak ?? 0,
+            item.profiles?.last_confirmation_date
+        ),
     }));
 
     mapped.sort((a, b) => (b.current_streak ?? 0) - (a.current_streak ?? 0));
