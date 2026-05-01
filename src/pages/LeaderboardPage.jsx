@@ -84,7 +84,7 @@ export default function LeaderboardPage() {
                                                     {top3[1].username}
                                                 </p>
                                                 <span className="streak-badge" style={{ fontSize: 11, padding: '3px 8px', marginTop: 4, display: 'inline-flex' }}>
-                                                    {top3[1].current_streak}d
+                                                    {top3[1].average_score} pts
                                                 </span>
                                             </div>
                                         </motion.div>
@@ -110,7 +110,7 @@ export default function LeaderboardPage() {
                                                     {top3[0].username}
                                                 </p>
                                                 <span className="streak-badge" style={{ fontSize: 11, padding: '3px 8px', marginTop: 4, display: 'inline-flex' }}>
-                                                    {top3[0].current_streak}d
+                                                    {top3[0].average_score} pts
                                                 </span>
                                             </div>
                                         </motion.div>
@@ -135,7 +135,7 @@ export default function LeaderboardPage() {
                                                     {top3[2].username}
                                                 </p>
                                                 <span className="streak-badge" style={{ fontSize: 11, padding: '3px 8px', marginTop: 4, display: 'inline-flex' }}>
-                                                    {top3[2].current_streak}d
+                                                    {top3[2].average_score} pts
                                                 </span>
                                             </div>
                                         </motion.div>

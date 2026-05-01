@@ -80,23 +80,28 @@ export function isSameDay(a, b) {
         && a.getDate() === b.getDate();
 }
 
-export function calculateEffectiveStreak(currentStreak, lastDateRaw) {
-    if (!currentStreak) return 0;
-    if (!lastDateRaw) return 0;
-
-    const lastDate = new Date(lastDateRaw);
+export function calculateAverageScore(totalScore, startedTrackingOnRaw) {
+    if (totalScore == null || !startedTrackingOnRaw) return 0;
+    
+    const start = new Date(startedTrackingOnRaw + 'T12:00:00Z');
     const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    if (isSameDay(lastDate, today) || isSameDay(lastDate, yesterday)) {
-        return currentStreak;
-    }
-    return 0;
+    start.setUTCHours(0,0,0,0);
+    today.setUTCHours(0,0,0,0);
+    
+    const diffTime = Math.abs(today - start);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    
+    const avg = Number(totalScore) / diffDays;
+    return Math.round(avg * 10) / 10;
 }
 
-export const confirmStreak = async () => {
-    const { error } = await supabase.rpc('confirm_streak');
+export const confirmStreak = async (stats = {}) => {
+    const { workout_minutes = 0, steps_walked = 0, study_hours = 0 } = stats;
+    const { error } = await supabase.rpc('confirm_streak', {
+        p_workout_minutes: workout_minutes,
+        p_steps_walked: steps_walked,
+        p_study_hours: study_hours
+    });
     if (error) throw error;
 };
 
@@ -121,16 +126,16 @@ export const getTodayLog = async (userId) => {
 export const getGlobalLeaderboard = async () => {
     const { data, error } = await supabase
         .from('profiles')
-        .select('username, current_streak, last_confirmation_date')
+        .select('username, total_score, started_tracking_on')
         .limit(1000);
     if (error) throw error;
 
     const mapped = (data || []).map((item) => ({
         username: item.username,
-        current_streak: calculateEffectiveStreak(item.current_streak, item.last_confirmation_date),
+        average_score: calculateAverageScore(item.total_score, item.started_tracking_on),
     }));
 
-    mapped.sort((a, b) => b.current_streak - a.current_streak);
+    mapped.sort((a, b) => b.average_score - a.average_score);
     return mapped.slice(0, 50);
 };
 
@@ -209,20 +214,20 @@ export const removeMember = async (roomId, userId) => {
 export const getRoomLeaderboard = async (roomId) => {
     const { data, error } = await supabase
         .from('room_members')
-        .select('user_id, profiles(username, current_streak, last_confirmation_date)')
+        .select('user_id, profiles(username, total_score, started_tracking_on)')
         .eq('room_id', roomId);
     if (error) throw error;
 
     const mapped = (data || []).map((item) => ({
         user_id: item.user_id,
         username: item.profiles?.username ?? '',
-        current_streak: calculateEffectiveStreak(
-            item.profiles?.current_streak ?? 0,
-            item.profiles?.last_confirmation_date
+        average_score: calculateAverageScore(
+            item.profiles?.total_score ?? 0,
+            item.profiles?.started_tracking_on
         ),
     }));
 
-    mapped.sort((a, b) => (b.current_streak ?? 0) - (a.current_streak ?? 0));
+    mapped.sort((a, b) => (b.average_score ?? 0) - (a.average_score ?? 0));
     return mapped;
 };
 

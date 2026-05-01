@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import useUserStore from '../stores/useUserStore';
 import {
-    confirmStreak, resetStreak, getTodayLog, signOut,
+    confirmStreak, resetStreak, getTodayLog, signOut, calculateAverageScore
 } from '../lib/supabase';
 
 function isSameDay(a, b) {
@@ -26,11 +26,16 @@ export default function DashboardPage() {
     const [pageLoading, setPageLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
 
-    const [effectiveStreak, setEffectiveStreak] = useState(0);
-    const [longestStreak, setLongestStreak] = useState(0);
+    const [averageScore, setAverageScore] = useState(0);
     const [statusMessage, setStatusMessage] = useState('');
     const [confirmEnabled, setConfirmEnabled] = useState(true);
     const [resetEnabled, setResetEnabled] = useState(true);
+
+    // Habit Tracking State
+    const [workoutEnabled, setWorkoutEnabled] = useState(false);
+    const [workoutMinutes, setWorkoutMinutes] = useState(30);
+    const [stepsWalked, setStepsWalked] = useState(5000);
+    const [studyHours, setStudyHours] = useState(2);
 
     const loadData = async () => {
         if (!user) return;
@@ -39,41 +44,35 @@ export default function DashboardPage() {
         const p = useUserStore.getState().profile;
         if (!p) return;
 
-        const currentStreak = p.current_streak ?? 0;
-        const longest = p.longest_streak ?? 0;
-        const lastDateRaw = p.last_confirmation_date;
-        const lastDate = lastDateRaw ? new Date(lastDateRaw) : null;
-
-        const today = new Date();
-        const yesterday = new Date(today);
-        yesterday.setDate(yesterday.getDate() - 1);
-
-        let effective = 0, status = '', cEnabled = true, rEnabled = true;
+        const avgScore = calculateAverageScore(p.total_score, p.started_tracking_on);
+        
+        let status = '', cEnabled = true, rEnabled = true;
 
         if (todayLog?.status === 'relapsed') {
-            effective = 0; status = 'Come back stronger tomorrow.';
+            status = 'You rested today. Come back tomorrow.';
             cEnabled = false; rEnabled = false;
         } else if (todayLog?.status === 'confirmed') {
-            effective = currentStreak; status = 'Streak confirmed today.';
+            status = 'Habits logged for today!';
             cEnabled = false; rEnabled = true;
         } else {
-            if (!lastDate) {
-                effective = 0; status = 'Start your first streak.';
-            } else if (isSameDay(lastDate, yesterday)) {
-                effective = currentStreak; status = 'Confirm today to keep the streak alive.';
-            } else if (isSameDay(lastDate, today)) {
-                effective = currentStreak; status = 'Streak active today.';
-                cEnabled = false;
-            } else {
-                effective = 0; status = 'Streak broken. Confirm to restart.';
-            }
+            status = 'Log your habits to boost your score.';
         }
 
-        setEffectiveStreak(effective);
-        setLongestStreak(longest);
+        setAverageScore(avgScore);
         setStatusMessage(status);
         setConfirmEnabled(cEnabled);
         setResetEnabled(rEnabled);
+        
+        // Load existing habit data if present
+        if (todayLog) {
+            if (todayLog.workout_minutes > 0) {
+                setWorkoutEnabled(true);
+                setWorkoutMinutes(todayLog.workout_minutes);
+            }
+            if (todayLog.steps_walked != null) setStepsWalked(todayLog.steps_walked);
+            if (todayLog.study_hours != null) setStudyHours(todayLog.study_hours);
+        }
+
         setPageLoading(false);
     };
 
@@ -81,9 +80,19 @@ export default function DashboardPage() {
 
     const handleConfirm = async () => {
         setProcessing(true);
-        await confirmStreak();
-        await loadData();
-        setProcessing(false);
+        try {
+            await confirmStreak({
+                workout_minutes: workoutEnabled ? Number(workoutMinutes) : 0,
+                steps_walked: Number(stepsWalked),
+                study_hours: Number(studyHours)
+            });
+            await loadData();
+        } catch (err) {
+            console.error('Error confirming streak:', err);
+            alert(`Supabase Error: ${err.message || JSON.stringify(err)}\n\nPlease ensure you successfully ran the SQL query.`);
+        } finally {
+            setProcessing(false);
+        }
     };
     const handleReset = async () => {
         setProcessing(true);
@@ -206,10 +215,10 @@ export default function DashboardPage() {
                         variants={fadeUp(0.1)} initial="hidden" animate="show"
                         className="streak-circle"
                         style={{ width: circleSize, height: circleSize }}
-                        aria-label={`Current streak: ${effectiveStreak} days`}
+                        aria-label={`Average score: ${averageScore} pts`}
                     >
                         <motion.span
-                            key={effectiveStreak}
+                            key={averageScore}
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ type: 'spring', stiffness: 200, damping: 18 }}
@@ -221,7 +230,7 @@ export default function DashboardPage() {
                                 lineHeight: 1,
                             }}
                         >
-                            {effectiveStreak}
+                            {averageScore}
                         </motion.span>
                         <span
                             style={{
@@ -231,7 +240,7 @@ export default function DashboardPage() {
                                 fontWeight: 600, marginTop: 6,
                             }}
                         >
-                            DAYS
+                            PTS / DAY
                         </span>
                     </motion.div>
 
@@ -246,11 +255,67 @@ export default function DashboardPage() {
 
                     {/* Longest streak (moved to footer) */}
 
-                    {/* ── Action Buttons ── */}
+                    {/* ── Action Buttons & Habit Tracker ── */}
                     <motion.div
                         variants={fadeUp(0.22)} initial="hidden" animate="show"
-                        style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}
+                        style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}
                     >
+                        {confirmEnabled && (
+                            <div className="glass-card" style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 20, borderRadius: 20, background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <h3 style={{ color: '#fff', fontSize: 16, fontWeight: 600, margin: 0 }}>Daily Student Log</h3>
+                                </div>
+                                
+                                {/* Workout */}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>Did you workout?</label>
+                                        <button 
+                                            onClick={() => setWorkoutEnabled(!workoutEnabled)}
+                                            style={{ 
+                                                width: 44, height: 24, borderRadius: 12, 
+                                                background: workoutEnabled ? '#10B981' : 'rgba(255,255,255,0.1)',
+                                                position: 'relative', transition: 'background 0.3s', cursor: 'pointer'
+                                            }}
+                                        >
+                                            <motion.div 
+                                                animate={{ x: workoutEnabled ? 20 : 2 }}
+                                                style={{ width: 20, height: 20, background: '#fff', borderRadius: '50%', position: 'absolute', top: 2 }}
+                                            />
+                                        </button>
+                                    </div>
+                                    <AnimatePresence>
+                                        {workoutEnabled && (
+                                            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} style={{ overflow: 'hidden' }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)', borderRadius: 12, padding: '8px 12px', marginTop: 8 }}>
+                                                    <span style={{ color: '#fff', fontSize: 13 }}>Minutes</span>
+                                                    <input type="number" min="0" value={workoutMinutes} onChange={(e) => setWorkoutMinutes(e.target.value)} style={{ background: 'transparent', color: '#10B981', fontWeight: 'bold', fontSize: 16, textAlign: 'right', width: 60, outline: 'none' }} />
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+
+                                {/* Study */}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                    <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, display: 'flex', justifyContent: 'space-between' }}>
+                                        <span>Study Hours</span>
+                                        <span style={{ color: '#3B82F6', fontWeight: 600 }}>{studyHours}h</span>
+                                    </label>
+                                    <input type="range" min="0" max="16" step="0.5" value={studyHours} onChange={(e) => setStudyHours(e.target.value)} style={{ accentColor: '#3B82F6', cursor: 'pointer' }} />
+                                </div>
+
+                                {/* Steps */}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                    <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, display: 'flex', justifyContent: 'space-between' }}>
+                                        <span>Steps Walked</span>
+                                        <span style={{ color: '#F59E0B', fontWeight: 600 }}>{stepsWalked}</span>
+                                    </label>
+                                    <input type="range" min="0" max="30000" step="500" value={stepsWalked} onChange={(e) => setStepsWalked(e.target.value)} style={{ accentColor: '#F59E0B', cursor: 'pointer' }} />
+                                </div>
+                            </div>
+                        )}
+
                         {/* Confirm */}
                         <motion.button
                             id="confirm-streak-btn"
@@ -259,11 +324,11 @@ export default function DashboardPage() {
                             disabled={!confirmEnabled || processing}
                             whileHover={{ scale: confirmEnabled ? 1.01 : 1 }}
                             whileTap={{ scale: confirmEnabled ? 0.98 : 1 }}
-                            aria-label="Confirm today"
+                            aria-label="Log Habits & Confirm"
                         >
                             {processing
                                 ? <div className="spinner spinner-sm spinner-dark" />
-                                : <><span>✓</span> Confirm Today</>
+                                : <><span>✓</span> {confirmEnabled ? 'Log Habits & Confirm' : 'Confirmed Today'}</>
                             }
                         </motion.button>
 
@@ -309,7 +374,7 @@ export default function DashboardPage() {
             </main>
 
             <footer className="page-bottom-note" aria-hidden="true">
-                Longest Streak  {longestStreak} days
+                Total points earned: {Math.round(profile?.total_score || 0)}
             </footer>
         </div>
     );

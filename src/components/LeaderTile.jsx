@@ -70,9 +70,9 @@ export default function LeaderTile({ user, index, onTap, tappable = false, animD
                 {user.username || '—'}
             </span>
 
-            {/* Streak */}
+            {/* Average Score */}
             <span className="streak-badge">
-                {user.current_streak ?? 0}d
+                {user.average_score ?? 0} pts
             </span>
 
             {/* removed separate tap indicator — entire tile is clickable when `tappable` */}
