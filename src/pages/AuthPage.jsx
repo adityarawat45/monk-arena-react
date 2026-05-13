@@ -27,7 +27,7 @@ export default function AuthPage() {
     };
 
     return (
-        <div className="page-bg flex flex-col min-h-dvh overflow-hidden m-0 p-0 justify-center">
+        <div className="page-bg flex flex-col overflow-hidden m-0 p-0 items-center justify-center px-4 py-10 sm:px-6 sm:py-12" style={{ minHeight: '100dvh' }}>
             {/* Decorative glow orb */}
             <div
                 style={{
@@ -43,16 +43,17 @@ export default function AuthPage() {
                 variants={stagger}
                 initial="hidden"
                 animate="show"
-                className="relative z-10 flex flex-col h-full items-center justify-center p-6 gap-28"
-                style={{ maxWidth: 'min(920px, 92vw)', margin: '0 auto', width: '100%', minHeight: '80vh' }}
+                className="relative z-10 flex flex-col items-center justify-center p-6 sm:p-8 lg:p-10 gap-12 w-full max-w-3xl"
+                style={{ maxWidth: 'min(920px, 92vw)', margin: '0 auto', width: '100%' }}
             >
                 {/* Top: logo + headline */}
-                <div className="flex flex-col items-center gap-1 w-full">
+                <div className="flex flex-col items-center gap-0 w-full max-w-md m-auto">
                     <motion.div variants={fadeUp}>
                         <img
                             src="/transparentlogo.png"
                             alt="Monk Arena"
                             style={{
+                                display: 'block',
                                 height: 'clamp(200px, 40vw, 360px)',
                                 width: 'auto',
                                 objectFit: 'contain',
@@ -71,6 +72,7 @@ export default function AuthPage() {
                                 color: '#fff',
                                 lineHeight: 1.02,
                                 whiteSpace: 'nowrap',
+                                marginTop: 0,
                             }}
                         >
                             MONK ARENA
@@ -94,7 +96,7 @@ export default function AuthPage() {
                 </div>
 
                 {/* Bottom: CTA */}
-                <motion.div variants={fadeUp} className="w-full flex flex-col gap-3">
+                <motion.div variants={fadeUp} className="w-full flex flex-col gap-3 max-w-md mx-auto">
                     {error && (
                         <motion.div
                             initial={{ opacity: 0, height: 0 }}
@@ -112,8 +114,9 @@ export default function AuthPage() {
 
                     <motion.button
                         id="google-signin-btn"
+                        type="button"
                         className="btn btn-primary"
-                        style={{ height: 58, borderRadius: 16, fontSize: 16 }}
+                        style={{ width: '100%', maxWidth: 420, height: 58, borderRadius: 18, fontSize: 16, padding: '0 18px' }}
                         onClick={handleGoogleSignIn}
                         disabled={loading}
                         whileHover={{ scale: 1.01 }}
@@ -132,7 +135,7 @@ export default function AuthPage() {
                         )}
                     </motion.button>
 
-                    <p style={{ textAlign: 'center', fontSize: 11, color: 'gray', marginTop: 4 }}>
+                    <p style={{ textAlign: 'center', fontSize: 11, color: 'gray', marginTop: 16, marginBottom: 10 }}>
                         By continuing, you agree to our Privacy Policy &amp; Terms.
                     </p>
                 </motion.div>
