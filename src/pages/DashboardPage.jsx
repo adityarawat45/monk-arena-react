@@ -348,9 +348,6 @@ export default function DashboardPage() {
                 </div>
             </main>
 
-            <footer className="page-bottom-note" aria-hidden="true">
-                Total points earned: {Math.round(profile?.total_score || 0)}
-            </footer>
         </div>
     );
 }
