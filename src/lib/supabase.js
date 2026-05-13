@@ -105,11 +105,6 @@ export const confirmStreak = async (stats = {}) => {
     if (error) throw error;
 };
 
-export const resetStreak = async () => {
-    const { error } = await supabase.rpc('reset_streak');
-    if (error) throw error;
-};
-
 export const getTodayLog = async (userId) => {
     const today = new Date().toISOString().split('T')[0];
     const { data } = await supabase

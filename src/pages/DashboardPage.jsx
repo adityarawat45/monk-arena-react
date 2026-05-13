@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import useUserStore from '../stores/useUserStore';
 import {
-    confirmStreak, resetStreak, getTodayLog, signOut, calculateAverageScore
+    confirmStreak, getTodayLog, signOut, calculateAverageScore
 } from '../lib/supabase';
 
 function isSameDay(a, b) {
@@ -29,7 +29,6 @@ export default function DashboardPage() {
     const [averageScore, setAverageScore] = useState(0);
     const [statusMessage, setStatusMessage] = useState('');
     const [confirmEnabled, setConfirmEnabled] = useState(true);
-    const [resetEnabled, setResetEnabled] = useState(true);
 
     // Habit Tracking State
     const [workoutEnabled, setWorkoutEnabled] = useState(false);
@@ -46,14 +45,11 @@ export default function DashboardPage() {
 
         const avgScore = calculateAverageScore(p.total_score, p.started_tracking_on);
         
-        let status = '', cEnabled = true, rEnabled = true;
+        let status = '', cEnabled = true;
 
-        if (todayLog?.status === 'relapsed') {
-            status = 'You rested today. Come back tomorrow.';
-            cEnabled = false; rEnabled = false;
-        } else if (todayLog?.status === 'confirmed') {
+        if (todayLog?.status === 'confirmed') {
             status = 'Habits logged for today!';
-            cEnabled = false; rEnabled = true;
+            cEnabled = false;
         } else {
             status = 'Log your habits to boost your score.';
         }
@@ -61,7 +57,6 @@ export default function DashboardPage() {
         setAverageScore(avgScore);
         setStatusMessage(status);
         setConfirmEnabled(cEnabled);
-        setResetEnabled(rEnabled);
         
         // Load existing habit data if present
         if (todayLog) {
@@ -94,13 +89,6 @@ export default function DashboardPage() {
             setProcessing(false);
         }
     };
-    const handleReset = async () => {
-        setProcessing(true);
-        await resetStreak();
-        await loadData();
-        setProcessing(false);
-    };
-
     if (pageLoading) {
         return (
             <div className="page-bg flex items-center justify-center min-h-dvh">
@@ -330,19 +318,6 @@ export default function DashboardPage() {
                                 ? <div className="spinner spinner-sm spinner-dark" />
                                 : <><span>✓</span> {confirmEnabled ? 'Log Habits & Confirm' : 'Confirmed Today'}</>
                             }
-                        </motion.button>
-
-                        {/* Relapse */}
-                        <motion.button
-                            id="relapse-btn"
-                            className="btn btn-relapse"
-                            onClick={handleReset}
-                            disabled={!resetEnabled || processing}
-                            whileHover={{ scale: resetEnabled ? 1.01 : 1 }}
-                            whileTap={{ scale: resetEnabled ? 0.98 : 1 }}
-                            aria-label="I relapsed"
-                        >
-                            I Relapsed
                         </motion.button>
                     </motion.div>
 
